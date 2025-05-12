@@ -12,7 +12,7 @@ class AppText {
    static TextStyle normalTextStyle (double size,){
     return TextStyle(
       fontSize: size,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
       color: Colors.black,
     );
   }
@@ -27,7 +27,7 @@ class AppText {
    static TextStyle greenTextStyle (double size,){
     return TextStyle(
       fontSize: size,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.bold,
       color: Colors.green,
     );
   }
