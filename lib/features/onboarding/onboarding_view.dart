@@ -40,7 +40,7 @@ class OnboardingView extends StatelessWidget {
               width: double.infinity,
               child: CustomButtom(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.loginView);
+                  Navigator.pushNamed(context, AppRoutes.uploadItemView);
                 },
                 title: 'Get Started',
               ),
