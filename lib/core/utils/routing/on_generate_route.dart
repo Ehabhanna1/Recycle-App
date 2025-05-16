@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:recycle_app/core/utils/routing/app_routes.dart';
+import 'package:recycle_app/features/auth/login_view.dart';
 import 'package:recycle_app/features/home/home_view.dart';
 import 'package:recycle_app/features/onboarding/onboarding_view.dart';
 
@@ -15,6 +16,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.homeView:
       return MaterialPageRoute(
         builder: (context) => const HomeView(),
+      );
+    case AppRoutes.loginView:
+      return MaterialPageRoute(
+        builder: (context) => const LoginView(),
       );
     default:
       return MaterialPageRoute(

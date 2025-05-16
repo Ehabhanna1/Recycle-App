@@ -32,15 +32,15 @@ class OnboardingView extends StatelessWidget {
               style: AppText.normalTextStyle(20),
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 90),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SizedBox(
-              height: 52,
+              height: 60,
               width: double.infinity,
               child: CustomButtom(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.homeView);
+                  Navigator.pushNamed(context, AppRoutes.loginView);
                 },
                 title: 'Get Started',
               ),
