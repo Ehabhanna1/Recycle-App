@@ -3,13 +3,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:recycle_app/core/utils/routing/app_routes.dart';
+import 'package:recycle_app/features/admin_approval/admin_approval_view.dart';
 import 'package:recycle_app/features/auth/login_view.dart';
 import 'package:recycle_app/features/home/home_view.dart';
 import 'package:recycle_app/features/onboarding/onboarding_view.dart';
 import 'package:recycle_app/features/upload_items/upload_item_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
+     final arguments = settings.arguments;
   switch (settings.name) {
+    
     case AppRoutes.onboardingView:
       return MaterialPageRoute(
         builder: (context) => const OnboardingView(),
@@ -24,7 +27,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
     case AppRoutes.uploadItemView:
       return MaterialPageRoute(
-        builder: (context) => const UploadItemView(),
+        builder: (context) => UploadItemView(category: "", id: ""),
+      );
+    case AppRoutes.adminApprovalView:
+      return MaterialPageRoute(
+        builder: (context) => const AdminApprovalView(),
       );
     default:
       return MaterialPageRoute(

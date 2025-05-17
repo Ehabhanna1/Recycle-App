@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:recycle_app/core/services/shared_prefs_helper.dart';
 import 'package:recycle_app/core/utils/app_text.dart/app_text.dart';
+import 'package:recycle_app/core/utils/routing/app_routes.dart';
 import 'package:recycle_app/features/home/widgets/app_bar_home.dart';
 import 'package:recycle_app/features/home/widgets/categories_item.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String? userId;
+  getSharedPrefs()async{
+    userId = await SharedPrefsHelper().getUserId();
+    setState(() {
+      
+    });
+  }
+
+
+  onTheLoading()async{
+    await getSharedPrefs();
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    onTheLoading();
+    super.initState();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +69,11 @@ class HomeView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
              
               children: [
-                CategoriesItem(image: 'assets/images/plastic.png',title: "Plastic"),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, AppRoutes.uploadItemView);
+                  },
+                  child: CategoriesItem(image: 'assets/images/plastic.png',title: "Plastic")),
                 SizedBox(width: 20),
                 CategoriesItem(image: 'assets/images/paper.png',title: "Paper"),
                  SizedBox(width: 20),

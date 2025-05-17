@@ -12,7 +12,20 @@
           "package_name": "com.example.recycle_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "276842356711-gelegdd5rlsi0e3h5o4945usg6j84utn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.recycle_app",
+            "certificate_hash": "e98fc27bcbec0e1d40e11b347e18c3b7f7188399"
+          }
+        },
+        {
+          "client_id": "276842356711-e8gn2h7v809llf2iakrddeqlg1lf4lqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC29DqH1fFeUV4KFzHGdsmipAxtqv-3znQ"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276842356711-e8gn2h7v809llf2iakrddeqlg1lf4lqf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "276842356711-k89o7kl0ed62orj7ad1c17f1ldk2vtlc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.recycleApp"
+              }
+            }
+          ]
         }
       }
     }

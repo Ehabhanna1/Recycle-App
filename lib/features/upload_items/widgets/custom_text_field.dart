@@ -2,10 +2,11 @@
 import 'package:recycle_app/core/utils/app_text.dart/app_text.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key,required this.hintText,required this.prefixIcon});
+  const CustomTextField({super.key,required this.hintText,required this.prefixIcon,required this.controller});
 
   final String hintText;
   final IconData prefixIcon;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
               border: InputBorder.none,
 

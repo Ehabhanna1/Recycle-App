@@ -11,6 +11,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
 
 );
+
   runApp(const MyApp());
 }
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Recycle App',
       onGenerateRoute: onGenerateRoute,
-      initialRoute: AppRoutes.onboardingView,
+      initialRoute: AppRoutes.adminApprovalView,
       
     );
   }
