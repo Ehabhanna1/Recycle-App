@@ -26,4 +26,31 @@ class DataBaseService {
     return await FirebaseFirestore.instance
         .collection("Requests").doc(uid).set(userInfoData);
   }
+
+
+  Future <Stream <QuerySnapshot>> getAdminApproval() async {
+    return await FirebaseFirestore.instance.collection("Requests").where("Status", isEqualTo: "Pending").snapshots();
+  }
+
+    Future updateAdminRequests(
+    
+    String uid,
+   
+  ) async { 
+    return await FirebaseFirestore.instance
+        .collection("Requests").doc(uid).update({"Status": "Approved"});
+  }
+
+
+      Future updateUserRequests(
+   
+    String uid,
+    String itemId,
+  ) async { 
+    return await FirebaseFirestore.instance
+        .collection("users").doc(uid).collection("Items").doc(itemId).update({"Status": "Approved"});
+  }
+
+
+
 }
