@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recycle_app/core/services/data_base_sevice.dart';
@@ -23,6 +25,34 @@ class _AdminApprovalViewState extends State<AdminApprovalView> {
     getOnTheLoading();
     super.initState();
   }
+
+
+
+  Future<String> getUserPoints(String docId)async{
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.
+      collection("users").doc(docId).get();
+
+      if(documentSnapshot.exists){
+        var data = documentSnapshot.data() as Map<String,dynamic>;
+        String points = data["Points"];
+
+        return points.toString();
+      }else{
+        log("No such document");
+        return "No Data";
+        
+      }
+    
+    } catch (e) {
+      log("Error getting document: $e");
+      return "No Error";
+      
+    }
+  }
+
+
+
 
   Widget allApproval() {
     return StreamBuilder(
@@ -93,7 +123,7 @@ class _AdminApprovalViewState extends State<AdminApprovalView> {
                                     color: Colors.green,
                                   ),
                                   SizedBox(width: 5),
-                                  Container(
+                                  SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width / 3,
                                     child: Text(
@@ -118,6 +148,9 @@ class _AdminApprovalViewState extends State<AdminApprovalView> {
                               SizedBox(height: 7),
                               GestureDetector(
                                 onTap: () async{
+                                  String userPoints = await getUserPoints(documentSnapshot["UserId"]);
+                                  int updatedPoints = int.parse(userPoints)+100;
+                                  await DataBaseService().updateUserPoints(documentSnapshot["UserId"],updatedPoints.toString());
                                   await DataBaseService().updateAdminRequests(documentSnapshot.id);
                                   await DataBaseService().updateUserRequests(documentSnapshot["UserId"],documentSnapshot.id);
                                 }, 

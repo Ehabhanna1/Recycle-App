@@ -21,22 +21,21 @@ class AuthFirebaseService {
 
    User? userDetail = result.user;
 
-   if(result != null){
-    Map<String,dynamic> userInfoData = {
-      "uid": userDetail!.uid,
-      "email": userDetail!.email,
-      "displayName": userDetail.displayName,
-      "photoURL": userDetail.photoURL,
-    };
+  Map<String,dynamic> userInfoData = {
+    "uid": userDetail!.uid,
+    "email": userDetail.email,
+    "displayName": userDetail.displayName,
+    "photoURL": userDetail.photoURL,
+    "Points": "0",
+  };
 
-    await DataBaseService().addUserInfo(userInfoData, userDetail.uid);
-    await SharedPrefsHelper().saveUserId(userDetail.uid);
-    await SharedPrefsHelper().saveUserName(userDetail.displayName!);
-    await SharedPrefsHelper().saveUserEmail(userDetail.email!);
-    await SharedPrefsHelper().saveUserImage(userDetail.photoURL!);
-    
-    Navigator.pushNamed(context, AppRoutes.homeView);
-   }
-
+  await DataBaseService().addUserInfo(userInfoData, userDetail.uid);
+  await SharedPrefsHelper().saveUserId(userDetail.uid);
+  await SharedPrefsHelper().saveUserName(userDetail.displayName!);
+  await SharedPrefsHelper().saveUserEmail(userDetail.email!);
+  await SharedPrefsHelper().saveUserImage(userDetail.photoURL!);
+  
+  Navigator.pushNamed(context, AppRoutes.homeView);
+ 
    }
 }

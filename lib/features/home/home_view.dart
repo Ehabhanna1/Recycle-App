@@ -75,12 +75,24 @@ class _HomeViewState extends State<HomeView> {
                   },
                   child: CategoriesItem(image: 'assets/images/plastic.png',title: "Plastic")),
                 SizedBox(width: 20),
-                CategoriesItem(image: 'assets/images/paper.png',title: "Paper"),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, AppRoutes.uploadItemView);
+                  },
+                  child: CategoriesItem(image: 'assets/images/paper.png',title: "Paper")),
                  SizedBox(width: 20),
                
-                CategoriesItem(image: 'assets/images/battery.png',title: 'Battery'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.uploadItemView);
+                  },
+                  child: CategoriesItem(image: 'assets/images/battery.png',title: 'Battery')),
                 SizedBox(width: 20),
-                CategoriesItem(image: 'assets/images/glass.png',title: 'Glass'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.uploadItemView);
+                  },
+                  child: CategoriesItem(image: 'assets/images/glass.png',title: 'Glass')),
        
                 
        

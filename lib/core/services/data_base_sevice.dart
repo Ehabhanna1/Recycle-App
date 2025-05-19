@@ -29,7 +29,7 @@ class DataBaseService {
 
 
   Future <Stream <QuerySnapshot>> getAdminApproval() async {
-    return await FirebaseFirestore.instance.collection("Requests").where("Status", isEqualTo: "Pending").snapshots();
+    return FirebaseFirestore.instance.collection("Requests").where("Status", isEqualTo: "Pending").snapshots();
   }
 
     Future updateAdminRequests(
@@ -49,6 +49,37 @@ class DataBaseService {
   ) async { 
     return await FirebaseFirestore.instance
         .collection("users").doc(uid).collection("Items").doc(itemId).update({"Status": "Approved"});
+  }
+
+  Future updateUserPoints(
+   
+    String uid,
+    String points,
+  ) async { 
+    return await FirebaseFirestore.instance
+        .collection("users").doc(uid).update({"Points": points});
+  }
+
+
+  Future addUserRedeemPoints(
+    Map<String, dynamic> userInfoData,
+    String uid,
+    String redeemId
+    
+  ) async {
+    return await FirebaseFirestore.instance
+        .collection("users").doc(uid).collection("Redeem").doc(redeemId).set(userInfoData);
+  }
+
+
+  Future addAdminRedeemRequest(
+    Map<String, dynamic> userInfoData,
+  
+    String redeemId
+    
+  ) async {
+    return await FirebaseFirestore.instance
+        .collection("Redeem").doc(redeemId).set(userInfoData);
   }
 
 
