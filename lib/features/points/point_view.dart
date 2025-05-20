@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:random_string/random_string.dart';
 import 'package:recycle_app/core/services/data_base_sevice.dart';
 import 'package:recycle_app/core/services/shared_prefs_helper.dart';
@@ -149,6 +150,80 @@ class _PointViewState extends State<PointView> {
                         fontSize: 25,
                       ),
                     ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text("Last Transactions", style: AppText.normalTextStyle(22.0)),
+                            SizedBox(height: 20),
+                            Container(
+                              height: MediaQuery.of(context).size.height/2.3,
+                               margin: EdgeInsets.only(left: 20,right: 20,top: 10),
+                              decoration: BoxDecoration(
+                              // color: Color.fromARGB(255, 233, 233, 249),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    padding: EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 233, 233, 249),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                         padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Text("20\nMay",textAlign: TextAlign.center,style: AppText.whiteTextStyle(22),),
+
+                                        ),
+                                        SizedBox(width: 20),
+                                        Column(
+                                          children: [
+                                            Text("Redeem Points", style: AppText.normalTextStyle(21)),
+                                            Text("100", style: AppText.greenTextStyle(25)),
+                                          ],
+                                        ),
+                                        SizedBox(width: 30,),
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(48, 241, 77, 66),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Text("Pending", style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold)),
+                                        ),
+                                        
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                            
+                            
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -223,6 +298,8 @@ class _PointViewState extends State<PointView> {
                       _upiController.text.isNotEmpty &&
                        int.parse(myPoints!)>int.parse(_pointsController.text) ) {
                             int updatePoints = int.parse(myPoints!)-int.parse(_pointsController.text);
+                            DateTime now = DateTime.now();
+                            String formattedDate = DateFormat("yyyy-MM-dd").format(now);
                             await DataBaseService().updateUserPoints(id!, updatePoints.toString());
 
                             Map<String,dynamic> userRedeemMap = {
@@ -230,6 +307,7 @@ class _PointViewState extends State<PointView> {
                               "Points": _pointsController.text,
                               "UPI ID": _upiController.text,
                               "Status": "Pending",
+                              "Date": formattedDate,
                             };
                             String redeemId = randomAlphaNumeric(10);
 
