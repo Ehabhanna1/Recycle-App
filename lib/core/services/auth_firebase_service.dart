@@ -35,7 +35,7 @@ class AuthFirebaseService {
   await SharedPrefsHelper().saveUserEmail(userDetail.email!);
   await SharedPrefsHelper().saveUserImage(userDetail.photoURL!);
   
-  Navigator.pushNamed(context, AppRoutes.homeView);
+  Navigator.pushNamed(context, AppRoutes.mainNavBarView);
  
    }
 }

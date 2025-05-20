@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Recycle App',
       onGenerateRoute: onGenerateRoute,
-      initialRoute: AppRoutes.mainNavBarView,
+      initialRoute: AppRoutes.adminRedeemApprovedView,
       
     );
   }

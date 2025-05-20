@@ -7,4 +7,5 @@ class AppRoutes {
   static const String pointView = '/point';
   static const String profileView = '/profile';
   static const String mainNavBarView = '/mainNavBar';
+  static const String adminRedeemApprovedView = '/adminRedeemApproved';
 }

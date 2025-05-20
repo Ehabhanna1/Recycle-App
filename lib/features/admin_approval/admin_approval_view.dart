@@ -178,7 +178,7 @@ class _AdminApprovalViewState extends State<AdminApprovalView> {
                 );
               },
             )
-            : Center(child: Text("No Data"));
+            : Center(child: Text("No Data",style: AppText.normalTextStyle(30),));
       },
     );
   }

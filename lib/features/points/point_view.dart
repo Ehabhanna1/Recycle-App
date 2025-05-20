@@ -18,23 +18,25 @@ class PointView extends StatefulWidget {
 }
 
 class _PointViewState extends State<PointView> {
-  String? id,myPoints,name;
+  String? id, myPoints, name;
 
-  getTheSharedPrefs()async{
+  Stream? pointsStream;
+
+  getTheSharedPrefs() async {
     id = await SharedPrefsHelper().getUserId();
     name = await SharedPrefsHelper().getUserName();
     setState(() {});
   }
 
-  onTheLoading()async{
+  onTheLoading() async {
     await getTheSharedPrefs();
-   myPoints = await getUserPoints(id!);
-   setState(() {});
+    myPoints = await getUserPoints(id!);
+    pointsStream = await DataBaseService().getUserTransactions(id!);
+    setState(() {});
   }
 
   @override
   void initState() {
-    
     super.initState();
     onTheLoading();
   }
@@ -62,6 +64,75 @@ class _PointViewState extends State<PointView> {
     }
   }
 
+  Widget allApproval() {
+    return StreamBuilder(
+      stream: pointsStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.vertical,
+              itemCount:  snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot documentSnapshot = snapshot.data.docs[index];
+                return Container(
+                  padding: EdgeInsets.all(12),
+                  margin: EdgeInsets.only(left: 20,right: 20,bottom: 15),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 233, 233, 249),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                 
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          documentSnapshot["Date"],
+                          textAlign: TextAlign.center,
+                          style: AppText.whiteTextStyle(22),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Column(
+                        children: [
+                          Text(
+                            "Redeem Points",
+                            style: AppText.normalTextStyle(20),
+                          ),
+                          Text(documentSnapshot["Points"], style: AppText.greenTextStyle(25)),
+                        ],
+                      ),
+                      SizedBox(width: 30),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: documentSnapshot["Status"] == "Approved" ? const Color.fromARGB(79, 76, 175, 79) : const Color.fromARGB(48, 241, 77, 66),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          documentSnapshot["Status"],
+                          style: TextStyle(
+                            color: documentSnapshot["Status"] == "Approved" ? Colors.green : Colors.red,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+            : Center(child: Text("No Data"));
+      },
+    );
+  }
+
   @override
   void dispose() {
     _pointsController.dispose();
@@ -72,90 +143,32 @@ class _PointViewState extends State<PointView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: myPoints==null? Center(
-        child: CupertinoActivityIndicator(
-          animating: true,color: Colors.green,radius: 40,),):
-           Container(
-        margin: EdgeInsets.only(top: 47),
-        child: Column(
-          children: [
-            Center(child: Text("Points", style: AppText.headLineTextStyle(25))),
-            SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                //height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 233, 233, 249),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
+      body:
+          myPoints == null
+              ? Center(
+                child: CupertinoActivityIndicator(
+                  animating: true,
+                  color: Colors.green,
+                  radius: 40,
                 ),
+              )
+              : Container(
+                margin: EdgeInsets.only(top: 47),
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
-                    Container(
-                      margin: EdgeInsets.only(left: 40, right: 40),
-                      child: Material(
-                        elevation: 3,
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Image.asset(
-                                "assets/images/coin.png",
-                                height: 70,
-                                width: 70,
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(width: 30),
-                              Column(
-                                children: [
-                                  Text(
-                                    "Points Earned",
-                                    style: AppText.normalTextStyle(20),
-                                  ),
-                                  Text(
-                                    myPoints.toString(),
-                                    style: AppText.greenTextStyle(25),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 35),
-                    Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: CustomButtom(
-                        title: "Redeem Points",
-                        onPressed: () {
-                          openBox();
-                        },
-                        fontSize: 25,
+                    Center(
+                      child: Text(
+                        "Points",
+                        style: AppText.headLineTextStyle(25),
                       ),
                     ),
                     SizedBox(height: 20),
                     Expanded(
                       child: Container(
                         width: MediaQuery.of(context).size.width,
+                        //height: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 233, 233, 249),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(30),
                             topRight: Radius.circular(30),
@@ -163,63 +176,89 @@ class _PointViewState extends State<PointView> {
                         ),
                         child: Column(
                           children: [
-                            SizedBox(height: 10),
-                            Text("Last Transactions", style: AppText.normalTextStyle(22.0)),
-                            SizedBox(height: 20),
+                            SizedBox(height: 30),
                             Container(
-                              height: MediaQuery.of(context).size.height/2.3,
-                               margin: EdgeInsets.only(left: 20,right: 20,top: 10),
+                              margin: EdgeInsets.only(left: 40, right: 40),
+                              child: Material(
+                                elevation: 3,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Image.asset(
+                                        "assets/images/coin.png",
+                                        height: 70,
+                                        width: 70,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SizedBox(width: 30),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "Points Earned",
+                                            style: AppText.normalTextStyle(20),
+                                          ),
+                                          Text(
+                                            myPoints.toString(),
+                                            style: AppText.greenTextStyle(25),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 35),
+                            Container(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width / 1.5,
                               decoration: BoxDecoration(
-                              // color: Color.fromARGB(255, 233, 233, 249),
+                                color: Colors.green,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: 10,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    padding: EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 233, 233, 249),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                         padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Text("20\nMay",textAlign: TextAlign.center,style: AppText.whiteTextStyle(22),),
-
-                                        ),
-                                        SizedBox(width: 20),
-                                        Column(
-                                          children: [
-                                            Text("Redeem Points", style: AppText.normalTextStyle(21)),
-                                            Text("100", style: AppText.greenTextStyle(25)),
-                                          ],
-                                        ),
-                                        SizedBox(width: 30,),
-                                        Container(
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(48, 241, 77, 66),
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Text("Pending", style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold)),
-                                        ),
-                                        
-                                      ],
-                                    ),
-                                  );
+                              child: CustomButtom(
+                                title: "Redeem Points",
+                                onPressed: () {
+                                  openBox();
                                 },
+                                fontSize: 25,
                               ),
-                            )
-                            
-                            
+                            ),
+                            SizedBox(height: 20),
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Text(
+                                      "Last Transactions",
+                                      style: AppText.normalTextStyle(22.0),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Container(
+                                      height: MediaQuery.of(context).size.height / 2.3,
+                                      child: allApproval(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -227,10 +266,6 @@ class _PointViewState extends State<PointView> {
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -293,35 +328,48 @@ class _PointViewState extends State<PointView> {
                   ),
                   SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       if (_pointsController.text.isNotEmpty &&
-                      _upiController.text.isNotEmpty &&
-                       int.parse(myPoints!)>int.parse(_pointsController.text) ) {
-                            int updatePoints = int.parse(myPoints!)-int.parse(_pointsController.text);
-                            DateTime now = DateTime.now();
-                            String formattedDate = DateFormat("yyyy-MM-dd").format(now);
-                            await DataBaseService().updateUserPoints(id!, updatePoints.toString());
+                          _upiController.text.isNotEmpty &&
+                          int.parse(myPoints!) >
+                              int.parse(_pointsController.text)) {
+                        int updatePoints =
+                            int.parse(myPoints!) -
+                            int.parse(_pointsController.text);
+                        DateTime now = DateTime.now();
+                        String formattedDate = DateFormat(
+                          "dd\nMMM",
+                        ).format(now);
+                        await DataBaseService().updateUserPoints(
+                          id!,
+                          updatePoints.toString(),
+                        );
 
-                            Map<String,dynamic> userRedeemMap = {
-                              "Name": name,
-                              "Points": _pointsController.text,
-                              "UPI ID": _upiController.text,
-                              "Status": "Pending",
-                              "Date": formattedDate,
-                            };
-                            String redeemId = randomAlphaNumeric(10);
+                        Map<String, dynamic> userRedeemMap = {
+                          "Name": name,
+                          "Points": _pointsController.text,
+                          "UPI ID": _upiController.text,
+                          "Status": "Pending",
+                          "Date": formattedDate,
+                          "UserId": id,
+                        };
+                        String redeemId = randomAlphaNumeric(10);
 
-                            await DataBaseService().addUserRedeemPoints(userRedeemMap, id!, redeemId); 
-                            await DataBaseService().addAdminRedeemRequest(userRedeemMap, redeemId);
+                        await DataBaseService().addUserRedeemPoints(
+                          userRedeemMap,
+                          id!,
+                          redeemId,
+                        );
+                        await DataBaseService().addAdminRedeemRequest(
+                          userRedeemMap,
+                          redeemId,
+                        );
 
-                            myPoints = await getUserPoints(id!);
-                            setState(() {
-                           
-                            });
+                        myPoints = await getUserPoints(id!);
+                        setState(() {});
 
-                            Navigator.pop(context);
-                            
-                          }
+                        Navigator.pop(context);
+                      }
                     },
                     child: Center(
                       child: Container(
