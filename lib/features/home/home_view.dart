@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recycle_app/core/services/data_base_sevice.dart';
 import 'package:recycle_app/core/services/shared_prefs_helper.dart';
 import 'package:recycle_app/core/utils/app_text.dart/app_text.dart';
 import 'package:recycle_app/core/utils/routing/app_routes.dart';
@@ -13,9 +16,16 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String? userId;
+  String? userId,name;
+
+
+  Stream? pendingStream;
+
+
+
   getSharedPrefs()async{
     userId = await SharedPrefsHelper().getUserId();
+    name = await SharedPrefsHelper().getUserName();
     setState(() {
       
     });
@@ -24,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
 
   onTheLoading()async{
     await getSharedPrefs();
+    pendingStream = await DataBaseService().getUserPendingRequests(userId!);
     setState(() {
       
     });
@@ -31,9 +42,65 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    onTheLoading();
+     onTheLoading();
+    
     super.initState();
   }
+
+
+   Widget allPendingRequests() {
+    return StreamBuilder(
+      stream: pendingStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.vertical,
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot documentSnapshot = snapshot.data.docs[index];
+                return   Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 20,right: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.black54,width: 2)
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 10),
+                  Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_on,color: Colors.green,size: 30),
+              SizedBox(width: 10),
+              Text(documentSnapshot["Address"],style: AppText.normalTextStyle(20)),
+            ],
+           ),
+           Divider(height: 20),
+                Image.asset("assets/images/chips.png",height: 150,width: 150,fit: BoxFit.cover),
+                SizedBox(height: 15),
+                     Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             Icon(Icons.layers,color: Colors.green,size: 33),
+              SizedBox(width: 10),
+              Text(documentSnapshot["Quantity"].toString(),style: AppText.normalTextStyle(25)),
+            ],
+           ),
+            SizedBox(width: 15),
+              ],
+            )
+           );
+              },
+            )
+            : Center(child: Text("No Pending Request Found",style: AppText.normalTextStyle(30),));
+      },
+    );
+  }
+
 
 
 
@@ -42,13 +109,13 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-     body: SingleChildScrollView(
+     body:name == null ? Center(child: CupertinoActivityIndicator(),) : SingleChildScrollView(
        child: Container(
         margin: EdgeInsets.only(top: 50,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBarHome(),
+            AppBarHome(name: name!,),
             SizedBox(height: 30,),
             Padding(
               padding: const EdgeInsets.only(left: 10),
@@ -109,40 +176,9 @@ class _HomeViewState extends State<HomeView> {
 
            SizedBox(height: 20),
          
-           Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left: 20,right: 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.black54,width: 2)
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                  Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.location_on,color: Colors.green,size: 30),
-              SizedBox(width: 10),
-              Text("Main market , delhi",style: AppText.normalTextStyle(20)),
-            ],
-           ),
-           Divider(height: 20),
-                Image.asset("assets/images/chips.png",height: 150,width: 150,fit: BoxFit.cover),
-                SizedBox(height: 15),
-                     Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-             Icon(Icons.layers,color: Colors.green,size: 33),
-              SizedBox(width: 10),
-              Text("3",style: AppText.normalTextStyle(25)),
-            ],
-           ),
-            SizedBox(width: 15),
-              ],
-            )
-           ),
+          Container(
+            height: MediaQuery.of(context).size.height/3,
+            child: allPendingRequests()),
            SizedBox(height: 30),
           ],
         ),

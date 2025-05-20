@@ -50,6 +50,15 @@ class DataBaseService {
         .snapshots();
   }
 
+   Future<Stream<QuerySnapshot>> getUserPendingRequests(String uid) async {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("Items")
+        .where("Status", isEqualTo: "Pending")
+        .snapshots();
+  }
+
   Future updateAdminRequests(String uid) async {
     return await FirebaseFirestore.instance
         .collection("Requests")

@@ -3,8 +3,11 @@ import 'package:recycle_app/core/utils/app_text.dart/app_text.dart';
 
 class AppBarHome extends StatelessWidget {
   const AppBarHome({
-    super.key,
+    super.key, required this.name,
   });
+
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class AppBarHome extends StatelessWidget {
           padding: const EdgeInsets.only(left: 5),
           child: Text("Hello, ",style: AppText.headLineTextStyle(28),),
         ),
-        Text("Ehab",style: AppText.greenTextStyle(25),),
+        Text(name,style: AppText.greenTextStyle(25),),
         Spacer(),
         Padding(
           padding: const EdgeInsets.only(right: 10),

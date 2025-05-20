@@ -107,7 +107,7 @@ class _PointViewState extends State<PointView> {
                           Text(documentSnapshot["Points"], style: AppText.greenTextStyle(25)),
                         ],
                       ),
-                      SizedBox(width: 30),
+                      SizedBox(width: 25),
                       Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _PointViewState extends State<PointView> {
                           style: TextStyle(
                             color: documentSnapshot["Status"] == "Approved" ? Colors.green : Colors.red,
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
