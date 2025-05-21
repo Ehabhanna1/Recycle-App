@@ -9,4 +9,5 @@ class AppRoutes {
   static const String mainNavBarView = '/mainNavBar';
   static const String adminRedeemApprovedView = '/adminRedeemApproved';
   static const String adminLoginView = '/adminLogin';
+  static const String homeAdminView = '/homeAdmin';
 }

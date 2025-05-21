@@ -219,6 +219,7 @@ class _UploadItemViewState extends State<UploadItemView> {
                               };
                               await DataBaseService().addUserUploadItem(addItem, id!, itemId);
                               await DataBaseService().addAdminItem(addItem, itemId);
+                              // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
                                 
                                 SnackBar(

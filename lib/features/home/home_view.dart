@@ -176,7 +176,7 @@ class _HomeViewState extends State<HomeView> {
 
            SizedBox(height: 20),
          
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height/3,
             child: allPendingRequests()),
            SizedBox(height: 30),

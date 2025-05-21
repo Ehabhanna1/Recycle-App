@@ -173,7 +173,7 @@ redeemStream = await DataBaseService().getAdminRedeemApproval();
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: allApproval()),
                   
@@ -184,6 +184,6 @@ redeemStream = await DataBaseService().getAdminRedeemApproval();
           ],
         ),
       ),
-    );;
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:recycle_app/core/utils/routing/app_routes.dart';
 import 'package:recycle_app/features/admin/admin_approval_view.dart';
 import 'package:recycle_app/features/admin/admin_login_view.dart';
 import 'package:recycle_app/features/admin/admin_redeem_approved.dart';
+import 'package:recycle_app/features/admin/home_admin_view.dart';
 import 'package:recycle_app/features/auth/login_view.dart';
 import 'package:recycle_app/features/home/home_view.dart';
 import 'package:recycle_app/features/main_navbar/main_nav_bar_view.dart';
@@ -15,7 +16,7 @@ import 'package:recycle_app/features/profile/profile_view.dart';
 import 'package:recycle_app/features/upload_items/upload_item_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
-     final arguments = settings.arguments;
+    // final arguments = settings.arguments;
 
   switch (settings.name) {
     
@@ -58,6 +59,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.adminLoginView:
       return MaterialPageRoute(
         builder: (context) => const AdminLoginView(),
+      );
+    case AppRoutes.homeAdminView:
+      return MaterialPageRoute(
+        builder: (context) => const HomeAdminView(),
       );
     default:
       return MaterialPageRoute(

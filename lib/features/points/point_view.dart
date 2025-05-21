@@ -251,7 +251,7 @@ class _PointViewState extends State<PointView> {
                                       style: AppText.normalTextStyle(22.0),
                                     ),
                                     SizedBox(height: 20),
-                                    Container(
+                                    SizedBox(
                                       height: MediaQuery.of(context).size.height / 2.3,
                                       child: allApproval(),
                                     ),
@@ -274,120 +274,119 @@ class _PointViewState extends State<PointView> {
     builder:
         (context) => AlertDialog(
           content: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.cancel),
-                      ),
-                      SizedBox(width: 30),
-                      Text("Redeem Points", style: AppText.greenTextStyle(20)),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text("Add Points", style: AppText.normalTextStyle(18)),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black38, width: 2),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextField(
-                      controller: _pointsController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Enter Points",
-                        hintStyle: AppText.normalTextStyle(18),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text("Add UPI ID", style: AppText.normalTextStyle(18)),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black38, width: 2),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextField(
-                      controller: _upiController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Enter UPI ID",
-                        hintStyle: AppText.normalTextStyle(18),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () async {
-                      if (_pointsController.text.isNotEmpty &&
-                          _upiController.text.isNotEmpty &&
-                          int.parse(myPoints!) >
-                              int.parse(_pointsController.text)) {
-                        int updatePoints =
-                            int.parse(myPoints!) -
-                            int.parse(_pointsController.text);
-                        DateTime now = DateTime.now();
-                        String formattedDate = DateFormat(
-                          "dd\nMMM",
-                        ).format(now);
-                        await DataBaseService().updateUserPoints(
-                          id!,
-                          updatePoints.toString(),
-                        );
-
-                        Map<String, dynamic> userRedeemMap = {
-                          "Name": name,
-                          "Points": _pointsController.text,
-                          "UPI ID": _upiController.text,
-                          "Status": "Pending",
-                          "Date": formattedDate,
-                          "UserId": id,
-                        };
-                        String redeemId = randomAlphaNumeric(10);
-
-                        await DataBaseService().addUserRedeemPoints(
-                          userRedeemMap,
-                          id!,
-                          redeemId,
-                        );
-                        await DataBaseService().addAdminRedeemRequest(
-                          userRedeemMap,
-                          redeemId,
-                        );
-
-                        myPoints = await getUserPoints(id!);
-                        setState(() {});
-
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
                         Navigator.pop(context);
-                      }
-                    },
-                    child: Center(
-                      child: Container(
-                        width: 100,
-
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text("Add", style: AppText.whiteTextStyle(20)),
-                        ),
+                      },
+                      child: Icon(Icons.cancel),
+                    ),
+                    SizedBox(width: 30),
+                    Text("Redeem Points", style: AppText.greenTextStyle(20)),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text("Add Points", style: AppText.normalTextStyle(18)),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black38, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    controller: _pointsController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Enter Points",
+                      hintStyle: AppText.normalTextStyle(18),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text("Add UPI ID", style: AppText.normalTextStyle(18)),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black38, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    controller: _upiController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Enter UPI ID",
+                      hintStyle: AppText.normalTextStyle(18),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () async {
+                    if (_pointsController.text.isNotEmpty &&
+                        _upiController.text.isNotEmpty &&
+                        int.parse(myPoints!) >
+                            int.parse(_pointsController.text)) {
+                      int updatePoints =
+                          int.parse(myPoints!) -
+                          int.parse(_pointsController.text);
+                      DateTime now = DateTime.now();
+                      String formattedDate = DateFormat(
+                        "dd\nMMM",
+                      ).format(now);
+                      await DataBaseService().updateUserPoints(
+                        id!,
+                        updatePoints.toString(),
+                      );
+            
+                      Map<String, dynamic> userRedeemMap = {
+                        "Name": name,
+                        "Points": _pointsController.text,
+                        "UPI ID": _upiController.text,
+                        "Status": "Pending",
+                        "Date": formattedDate,
+                        "UserId": id,
+                      };
+                      String redeemId = randomAlphaNumeric(10);
+            
+                      await DataBaseService().addUserRedeemPoints(
+                        userRedeemMap,
+                        id!,
+                        redeemId,
+                      );
+                      await DataBaseService().addAdminRedeemRequest(
+                        userRedeemMap,
+                        redeemId,
+                      );
+            
+                      myPoints = await getUserPoints(id!);
+                      setState(() {});
+            
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 100,
+            
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text("Add", style: AppText.whiteTextStyle(20)),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
