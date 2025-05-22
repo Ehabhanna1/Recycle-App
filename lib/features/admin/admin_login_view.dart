@@ -105,7 +105,7 @@ class _AdminLoginViewState extends State<AdminLoginView> {
 
   LoginAdmin(){
     FirebaseFirestore.instance.collection("Admin").get().then((snapshot){
-      snapshot.docs.forEach((result) {
+      for (var result in snapshot.docs) {
          if(result.data()["id"] != userNameController.text.trim() ){
            ScaffoldMessenger.of(context).showSnackBar(
              SnackBar(
@@ -126,7 +126,7 @@ class _AdminLoginViewState extends State<AdminLoginView> {
 
           Navigator.pushNamed(context, AppRoutes.homeAdminView);
          }
-      });
+      }
     });
   } 
 
